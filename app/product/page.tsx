@@ -162,7 +162,10 @@ export default function Product() {
         </Group>
         <Group mt={50} align="center" justify="flex-end">
           <Button
-            onClick={close}
+            onClick={() => {
+              form.reset();
+              close();
+            }}
             radius={10}
             variant="gradient"
             gradient={{ from: 'pink', to: 'yellow' }}
