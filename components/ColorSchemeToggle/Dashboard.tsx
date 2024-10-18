@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Button,
@@ -10,6 +12,7 @@ import {
   rem,
   SimpleGrid,
   Skeleton,
+  Switch,
   Text,
   Title,
   useMantineColorScheme,
@@ -23,6 +26,7 @@ import { TransactionsTable } from '../Transaction/TransactionsTable';
 import { Product } from '../types/main';
 
 export const Dashboard = () => {
+  const [fluidCollapse, setFluidCollapse] = useState(false);
   const { data: products, isError } = useQuery({
     queryFn: () => getProducts(),
     queryKey: ['FETCH_PRODUCTS'],
@@ -63,20 +67,40 @@ export const Dashboard = () => {
   }
   return (
     <>
-      <Container my="lg" fluid={false}>
+      <Container my="lg" fluid={fluidCollapse}>
         <Grid gutter="lg" className="mb-10">
           <Grid.Col span={12}>
-            <Title ta="left" mt={20}>
-              {/* Inventory Dashboard */}
-              <Text
-                inherit
+            <Group align="center" justify="space-between">
+              <Title ta="left">
+                {/* Inventory Dashboard */}
+                <Text
+                  inherit
+                  variant="gradient"
+                  component="span"
+                  gradient={{ from: 'pink', to: 'yellow' }}
+                >
+                  Inventory Dashboard
+                </Text>
+              </Title>
+              <Switch
+                checked={fluidCollapse}
+                onChange={(event) => setFluidCollapse(!fluidCollapse)}
+                color="teal"
                 variant="gradient"
-                component="span"
-                gradient={{ from: 'pink', to: 'yellow' }}
-              >
-                Inventory Dashboard
-              </Text>
-            </Title>
+                size="md"
+                thumbIcon={
+                  fluidCollapse ? (
+                    <IconCheck
+                      style={{ width: rem(12), height: rem(12) }}
+                      color={'red'}
+                      stroke={3}
+                    />
+                  ) : (
+                    <IconX style={{ width: rem(12), height: rem(12) }} color={'green'} stroke={5} />
+                  )
+                }
+              />
+            </Group>
           </Grid.Col>
         </Grid>
         {!productCardInfos && (
