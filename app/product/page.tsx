@@ -127,7 +127,7 @@ export default function Product() {
   });
 
   if (categoryNamesLoading || suppliersLoading) {
-    return <Skeleton height={300} radius="md" animate={false} />;
+    return <Skeleton height={300} radius="md" animate={true} />;
   }
 
   const categoryOnlyName = categoryNames.map(

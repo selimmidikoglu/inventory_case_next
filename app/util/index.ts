@@ -30,6 +30,21 @@ export const addProduct = async (body: any) => {
   const data = await res.json();
   return data;
 };
+export const addTransaction = async (body: any) => {
+  const res = await fetch('http://localhost:3000/api/transactions', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to add product'); // Handle errors
+  }
+  const data = await res.json();
+  return data;
+};
 export const getProductsWithSpecificCategory = async (id: string) => {
   const res = await fetch(`http://localhost:3000/api/products/category/${id}`);
   const data = await res.json();
@@ -52,6 +67,11 @@ export const getCategoryNamesWithId = async () => {
 };
 export const getTransactions = async () => {
   const res = await fetch('http://localhost:3000/api/transactions');
+  const data = await res.json();
+  return data;
+};
+export const getTransactionTypes = async () => {
+  const res = await fetch('http://localhost:3000/api/transactions/type');
   const data = await res.json();
   return data;
 };

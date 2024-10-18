@@ -9,7 +9,7 @@ import { getCategories, getProducts } from './util';
 export default function HomePage() {
   return (
     <>
-      {/* <DBInitiator /> */}
+      <DBInitiator />
       <Dashboard />
     </>
   );

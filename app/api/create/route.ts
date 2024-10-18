@@ -7,22 +7,22 @@ export async function GET(request: NextRequest) {
     try {
 
 
-        await prismaClient.categories.deleteMany();
         await prismaClient.products.deleteMany();
+        await prismaClient.categories.deleteMany();
         await prismaClient.inventoryTransactions.deleteMany();
         await prismaClient.suppliers.deleteMany();
 
         const categories = await prismaClient.categories.createMany({
             data: dummy().Categories
         })
+        const suppliers = await prismaClient.suppliers.createMany({
+            data: dummy().Suppliers
+        })
         const products = await prismaClient.products.createMany({
             data: dummy().Products
         })
         const inventoryTransactions = await prismaClient.inventoryTransactions.createMany({
             data: dummy().InventoryTransactions
-        })
-        const suppliers = await prismaClient.suppliers.createMany({
-            data: dummy().Suppliers
         })
         return NextResponse.json("Database initiated with dummy data.");
     }

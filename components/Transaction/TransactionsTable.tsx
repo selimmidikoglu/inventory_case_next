@@ -1,22 +1,24 @@
 import { useState } from 'react';
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import cx from 'clsx';
-import { Anchor, Group, Paper, Progress, ScrollArea, Skeleton, Table, Text } from '@mantine/core';
+import {
+  Anchor,
+  Button,
+  Group,
+  Paper,
+  Progress,
+  ScrollArea,
+  Skeleton,
+  Table,
+  Text,
+} from '@mantine/core';
 import { getTransactionWithProducts } from '../../app/util';
 import { TransactionWithProduct } from '../types/main';
 import classes from './TransactionsTable.module.css';
 
-export function TransactionsTable() {
+export function TransactionsTable({ data }: { data: TransactionWithProduct[] }) {
   const [scrolled, setScrolled] = useState(false);
-
-  const { data, isLoading } = useQuery({
-    queryFn: () => getTransactionWithProducts(),
-    queryKey: ['TRANSACTIONS_WITH_PRODUCTS'],
-  });
-
-  if (isLoading) {
-    return <Skeleton height={300} radius="md" animate={false} />;
-  }
 
   const rows = data.map((row: TransactionWithProduct) => (
     <Table.Tr key={row.id}>
@@ -29,9 +31,17 @@ export function TransactionsTable() {
 
   return (
     <Paper withBorder p="md" radius="md" h="100%">
-      <Text fz="xl" fw={700}>
-        Recent Transactions
-      </Text>
+      <Group align="center" justify="space-between" mb={'md'}>
+        <Text fz="xl" fw={700}>
+          Recent Transactions
+        </Text>
+
+        <Link href="/transaction">
+          <Button variant="light" color="green" radius="md">
+            Add Transaction
+          </Button>
+        </Link>
+      </Group>
       <ScrollArea h={300} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
         <Table miw={700}>
           <Table.Thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>

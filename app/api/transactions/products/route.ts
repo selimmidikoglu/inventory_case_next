@@ -7,7 +7,11 @@ export async function GET(request: Request) {
         const transactionsWithProductName = await prismaClient.inventoryTransactions.findMany({
             include: {
                 product: true
+            },
+            orderBy: {
+                date: 'desc'
             }
+
         });
         return NextResponse.json(transactionsWithProductName)
     } catch (error) {

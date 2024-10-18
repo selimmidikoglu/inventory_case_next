@@ -4,6 +4,7 @@ import prismaClient from '../../util/prismaClient'
 export async function GET(request: Request) {
     try {
         const products = await prismaClient.products.findMany();
+        console.log(products)
         return NextResponse.json(products)
     } catch (error) {
         console.log(error)

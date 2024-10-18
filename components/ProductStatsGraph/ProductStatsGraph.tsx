@@ -9,49 +9,28 @@ import classes from './ProductStatsGraph.module.css';
 
 export interface Percentage {
   label: string;
-  count: string;
+  count: number;
   part: number;
   color: string;
 }
-// const newData = dummy().Categories.map((category) => ({
-//   label: category.name,
-//   count: String(category.id),
-//   part: 20,
-//   color: '#47d6ab',
-// }));
 
+interface PercentageObj {
+  label: string;
+  count: number;
+  part: number;
+}
 type Props = {
-  categories: Category[];
+  data: PercentageObj[];
 };
 const ProductStatsGraph = (props: Props) => {
-  const { categories } = props;
+  const { data } = props;
 
-  const {
-    data: percentageData,
-    isLoading,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ['percentageData'],
-    queryFn: () => getPercentageCategory(),
-  });
-  if (isLoading) {
-    return <Skeleton height={300} radius="md" animate={false} />; // or a spinner component
-  }
-
-  // Show an error state if the query failed
-  if (error) {
-    return <div>Error loading data</div>;
-  }
-
-  // Map the data when it's available
   const newData =
-    percentageData?.map((el: Percentage, index: number) => ({
+    data?.map((el: PercentageObj, index: number) => ({
       ...el,
       color: graphColors[index],
-    })) || []; // Fallback to empty array if data is undefined
+    })) || [];
 
-  // Generate progress segments
   const segments = newData.map((segment: Percentage) => (
     <Progress.Section value={segment.part} color={segment.color} key={segment.color}>
       {segment.part > 10 && <Progress.Label>{segment.part}%</Progress.Label>}
@@ -81,7 +60,6 @@ const ProductStatsGraph = (props: Props) => {
             Stock by Category
           </Text>
           <Text c="teal" className={classes.diff} fz="sm" fw={700}>
-            {/* <span>18%</span> */}
             <IconArrowUpRight size="1rem" style={{ marginBottom: rem(4) }} stroke={1.5} />
           </Text>
         </Group>

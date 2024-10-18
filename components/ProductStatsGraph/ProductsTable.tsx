@@ -38,8 +38,8 @@ export function ProductsTable() {
     queryFn: () => getProductsWithSpecificCategory(String(categoryId)),
     queryKey: ['PRODUCTS_WITH_SPECIFIC_CATEGORY', categoryId],
   });
-  if (categoryNamesLoading || productsLoading) {
-    return <Skeleton height={300} radius="md" animate={false} />;
+  if (!categoryNames || !products) {
+    return <Skeleton height={300} radius="md" animate={true} />;
   }
   const categoryOnlyName = categoryNames.map(
     (category: { name: string; id: number }) => category.name

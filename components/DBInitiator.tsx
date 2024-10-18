@@ -1,3 +1,5 @@
+'use client';
+
 import { setInitialData } from '../app/util';
 
 type Props = {};

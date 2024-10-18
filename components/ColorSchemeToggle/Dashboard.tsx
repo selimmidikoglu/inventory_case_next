@@ -14,7 +14,7 @@ import {
   Title,
   useMantineColorScheme,
 } from '@mantine/core';
-import { getCategories, getProducts, getSuppliers, getTransactions } from '../../app/util';
+import { getPercentageCategory, getProducts, getTransactionWithProducts } from '../../app/util';
 import { dummy } from '../dummy';
 import InfoCard from '../ProductCard/InfoCard';
 import { ProductsTable } from '../ProductStatsGraph/ProductsTable';
@@ -27,17 +27,13 @@ export const Dashboard = () => {
     queryFn: () => getProducts(),
     queryKey: ['FETCH_PRODUCTS'],
   });
-  const { data: categories } = useQuery({
-    queryFn: () => getCategories(),
-    queryKey: ['FETCH_CATEGORIES'],
+  const { data: transactionWithProduct } = useQuery({
+    queryFn: () => getTransactionWithProducts(),
+    queryKey: ['TRANSACTIONS_WITH_PRODUCTS'],
   });
-  const { data: transactions } = useQuery({
-    queryFn: () => getTransactions(),
-    queryKey: ['FETCH_TRANSACTIONS'],
-  });
-  const { data: suppliers } = useQuery({
-    queryFn: () => getSuppliers(),
-    queryKey: ['FETCH_SUPPLIERS'],
+  const { data: percentageData, isLoading: percentageDataIsLoading } = useQuery({
+    queryKey: ['percentageData'],
+    queryFn: () => getPercentageCategory(),
   });
 
   let productCardInfos = undefined;
@@ -83,7 +79,18 @@ export const Dashboard = () => {
             </Title>
           </Grid.Col>
         </Grid>
-        {products && categories && (
+        {!productCardInfos && (
+          <Grid gutter="lg" className="mb-10">
+            {Array(3)
+              .fill(0)
+              .map((info) => (
+                <Grid.Col span={{ base: 12, xs: 4 }}>
+                  <Skeleton height={144} radius="md" animate={true} />
+                </Grid.Col>
+              ))}
+          </Grid>
+        )}
+        {products && (
           <Grid gutter="lg" className="mb-10">
             {productCardInfos!.map((info) => (
               <Grid.Col span={{ base: 12, xs: 4 }}>
@@ -94,10 +101,18 @@ export const Dashboard = () => {
         )}
         <Grid gutter="lg" className="mb-10">
           <Grid.Col span={{ base: 12, xs: 6 }}>
-            <ProductStatsGraph categories={categories} />
+            {!percentageData ? (
+              <Skeleton height={386} radius="md" animate={true} />
+            ) : (
+              <ProductStatsGraph data={percentageData} />
+            )}
           </Grid.Col>
           <Grid.Col span={{ base: 12, xs: 6 }}>
-            <TransactionsTable />
+            {!transactionWithProduct ? (
+              <Skeleton height={386} radius="md" animate={true} />
+            ) : (
+              <TransactionsTable data={transactionWithProduct} />
+            )}
           </Grid.Col>
         </Grid>
         <Grid gutter="lg" className="mb-10">
